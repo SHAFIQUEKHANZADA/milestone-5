@@ -25,28 +25,28 @@ var _a;
         var proFl = (_a = profileInput.files) === null || _a === void 0 ? void 0 : _a[0];
         var proURL = proFl ? URL.createObjectURL(proFl) : "";
         // Corrected template for image
-        var output = "\n      <h2>Resume</h2>\n      ".concat(proURL ? "<img src=\"".concat(proURL, "\" alt=\"profile\" class=\"profile\">") : '', "\n      <p><strong>Name:</strong> <span id=\"edit-name\" class=\"editable\"> ").concat(name_1, " ").concat(namesec, "</span></p>\n      <p><strong>Email:</strong><span id=\"edit-email\" class=\"editable\"> ").concat(em, "</span></p>\n      <p><strong>Phone:</strong><span id=\"edit-phone\" class=\"editable\"> ").concat(ph, "</span></p>\n      \n      <h3>Education</h3>\n      <p id=\"edit-edu\" class=\"editable\">").concat(edu, "</p>\n\n      <h3>Experience</h3>\n      <p id=\"edit-exp\" class=\"editable\">").concat(experience, "</p>\n\n      <h3>Skills</h3>\n      <p id=\"edit-skill\" class=\"editable\">").concat(skills, "</p>\n    ");
+        var output = "\n      <h2>Resume</h2>\n      ".concat(proURL ? "<img src=\"".concat(proURL, "\" alt=\"profile\" class=\"profile\">") : '', "\n      <p><strong>Name:</strong> <span id=\"edit-name\" class=\"editable\"> ").concat(name_1, " ").concat(namesec, "</span></p>\n      <p><strong>Email:</strong><span id=\"edit-email\" class=\"editable\"> ").concat(em, "</span></p>\n      <p><strong>Phone:</strong><span id=\"edit-phone\" class=\"editable\"> ").concat(ph, "</span></p>\n\n      <h3>Education</h3>\n      <p id=\"edit-edu\" class=\"editable\">").concat(edu, "</p>\n\n      <h3>Experience</h3>\n      <p id=\"edit-exp\" class=\"editable\">").concat(experience, "</p>\n\n      <h3>Skills</h3>\n      <p id=\"edit-skill\" class=\"editable\">").concat(skills, "</p>\n    ");
         var elres = document.getElementById("output");
         if (elres) {
             elres.innerHTML = output;
-            // Generate and append PDF download button
-            var downloadPdfBtn = document.createElement('button');
-            downloadPdfBtn.textContent = 'Download as PDF';
-            downloadPdfBtn.addEventListener('click', function () { return downloadResumeAsPDF(); });
-            // Generate and append Share link button
-            var shareLinkBtn = document.createElement('button');
-            shareLinkBtn.textContent = 'Share Resume';
-            shareLinkBtn.addEventListener('click', function () {
-                var shareableUrl = window.location.origin + '/' + unq_1;
-                navigator.clipboard.writeText(shareableUrl).then(function () {
-                    alert('Resume link copied to clipboard!');
+            var buttonContainer = document.getElementById("button-container");
+            if (buttonContainer) {
+                buttonContainer.innerHTML = '';
+                var downloadPdfBtn = document.createElement('button');
+                downloadPdfBtn.textContent = 'Download Resume';
+                downloadPdfBtn.addEventListener('click', function () { return downloadResumeAsPDF(); });
+                var shareLinkBtn = document.createElement('button');
+                shareLinkBtn.textContent = 'Share Resume';
+                shareLinkBtn.addEventListener('click', function () {
+                    var shareableUrl = window.location.origin + '/' + unq_1;
+                    navigator.clipboard.writeText(shareableUrl).then(function () {
+                        alert('Resume link copied to clipboard!');
+                    });
                 });
-            });
-            // Append buttons
-            elres.appendChild(downloadPdfBtn);
-            elres.appendChild(shareLinkBtn);
-            // Enable edit functionality
-            makeEdit();
+                buttonContainer.appendChild(downloadPdfBtn);
+                buttonContainer.appendChild(shareLinkBtn);
+                makeEdit();
+            }
         }
     }
     else {
@@ -77,7 +77,6 @@ function makeEdit() {
         });
     });
 }
-// Function to download the resume as PDF
 function downloadResumeAsPDF() {
     var resumeElement = document.getElementById("output");
     var options = {
@@ -88,7 +87,8 @@ function downloadResumeAsPDF() {
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
     if (resumeElement) {
-        html2pdf().from(resumeElement).set(options).save();
+        // Ensure html2pdf is included
+        window.html2pdf().from(resumeElement).set(options).save();
     }
     else {
         console.error('Resume content is missing.');
