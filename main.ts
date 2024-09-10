@@ -34,7 +34,7 @@ document.getElementById("form")?.addEventListener("submit", function (event) {
       <p><strong>Name:</strong> <span id="edit-name" class="editable"> ${name} ${namesec}</span></p>
       <p><strong>Email:</strong><span id="edit-email" class="editable"> ${em}</span></p>
       <p><strong>Phone:</strong><span id="edit-phone" class="editable"> ${ph}</span></p>
-      
+
       <h3>Education</h3>
       <p id="edit-edu" class="editable">${edu}</p>
 
@@ -49,25 +49,28 @@ document.getElementById("form")?.addEventListener("submit", function (event) {
     if (elres) {
       elres.innerHTML = output;
 
- 
-      const downloadPdfBtn = document.createElement('button');
-      downloadPdfBtn.textContent = 'Download Resume';
-      downloadPdfBtn.addEventListener('click', () => downloadResumeAsPDF());
- 
-      const shareLinkBtn = document.createElement('button');
-      shareLinkBtn.textContent = 'Share Resume';
-      shareLinkBtn.addEventListener('click', () => {
-        const shareableUrl = window.location.origin + '/' + unq;
-        navigator.clipboard.writeText(shareableUrl).then(() => {
-          alert('Resume link copied to clipboard!');
-        });
-      });
+      const buttonContainer = document.getElementById("button-container");
+      if (buttonContainer) {
+        buttonContainer.innerHTML = '';
 
-     
-      elres.appendChild(downloadPdfBtn);
-      elres.appendChild(shareLinkBtn);
- 
-      makeEdit();
+        const downloadPdfBtn = document.createElement('button');
+        downloadPdfBtn.textContent = 'Download Resume';
+        downloadPdfBtn.addEventListener('click', () => downloadResumeAsPDF());
+
+        const shareLinkBtn = document.createElement('button');
+        shareLinkBtn.textContent = 'Share Resume';
+        shareLinkBtn.addEventListener('click', () => {
+          const shareableUrl = window.location.origin + '/' + unq;
+          navigator.clipboard.writeText(shareableUrl).then(() => {
+            alert('Resume link copied to clipboard!');
+          });
+        });
+
+        buttonContainer.appendChild(downloadPdfBtn);
+        buttonContainer.appendChild(shareLinkBtn);
+
+        makeEdit();
+      }
     }
   } else {
     console.error("One or more element outputs are missing");
@@ -100,7 +103,7 @@ function makeEdit() {
     });
   });
 }
- 
+
 function downloadResumeAsPDF() {
   const resumeElement = document.getElementById("output");
   const options = {
@@ -112,8 +115,10 @@ function downloadResumeAsPDF() {
   };
 
   if (resumeElement) {
-    html2pdf().from(resumeElement).set(options).save();
+    // Ensure html2pdf is included
+    (window as any).html2pdf().from(resumeElement).set(options).save();
   } else {
     console.error('Resume content is missing.');
   }
 }
+
