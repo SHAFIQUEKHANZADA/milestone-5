@@ -148,3 +148,17 @@ input {
     width: 100%;  
     box-sizing: border-box;  
 }
+
+#button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  #button-container button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+  
